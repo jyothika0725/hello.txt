@@ -1,4 +1,6 @@
 hello.txt:
      K.Jyothika
      BSc-CS-A
-    I have done an experiment on creating a repository 
+
+    I have done an experiment on creating a repository.
+     in have also learned to edit the text in GitHub.
