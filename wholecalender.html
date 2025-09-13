@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Yearly Calendar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background: #f4f4f4;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .month {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+    }
+
+    .month-name {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .day-names, .days {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+    }
+
+    .day-names div {
+      font-weight: bold;
+      padding: 5px 0;
+      background: #eaeaea;
+    }
+
+    .days div {
+      padding: 5px 0;
+      border: 1px solid #ddd;
+      min-height: 30px;
+    }
+
+    .empty {
+      background: transparent;
+      border: none;
+    }
+
+    .today {
+      background: #007bff;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    @media (max-width: 800px) {
+      .calendar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .calendar {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="calendar-title">Yearly Calendar</h1>
+  <div class="calendar" id="calendar"></div>
+
+  <script>
+    const calendar = document.getElementById('calendar');
+    const title = document.getElementById('calendar-title');
+    const year = new Date().getFullYear();
+    title.innerText = `Calendar - ${year}`;
+
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+
+    const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+    const today = new Date();
+    const todayDate = today.getDate();
+    const todayMonth = today.getMonth();
+    const todayYear = today.getFullYear();
+
+    function createMonth(month, year) {
+      const monthDiv = document.createElement("div");
+      monthDiv.className = "month";
+
+      const monthName = document.createElement("div");
+      monthName.className = "month-name";
+      monthName.innerText = monthNames[month];
+      monthDiv.appendChild(monthName);
+
+      const dayNameRow = document.createElement("div");
+      dayNameRow.className = "day-names";
+      dayNames.forEach(day => {
+        const dayDiv = document.createElement("div");
+        dayDiv.innerText = day;
+        dayNameRow.appendChild(dayDiv);
+      });
+      monthDiv.appendChild(dayNameRow);
+
+      const daysGrid = document.createElement("div");
+      daysGrid.className = "days";
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      // Fill empty days before start of the month
+      for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        daysGrid.appendChild(empty);
+      }
+
+      // Fill days of the month
+      for (let d = 1; d <= totalDays; d++) {
+        const dayDiv = document.createElement("div");
+        dayDiv.innerText = d;
+
+        if (d === todayDate && month === todayMonth && year === todayYear) {
+          dayDiv.classList.add("today");
+        }
+
+        daysGrid.appendChild(dayDiv);
+      }
+
+      monthDiv.appendChild(daysGrid);
+      return monthDiv;
+    }
+
+    // Generate all 12 months
+    for (let m = 0; m < 12; m++) {
+      calendar.appendChild(createMonth(m, year));
+    }
+  </script>
+</body>
+</html>
